@@ -201,13 +201,13 @@ test('Q14: 著者「中村」で絞り込むと1件になる', async () => {
 
 // Q15: ジャンル「all」に戻すとテーブルが6件に戻る
 test('Q15: ジャンル「all」に戻すとテーブルが6件に戻る', async () => {
-  // Arrange: （beforeEach でセットアップ済み）
+// Arrange: tech に絞って、減ったことを確認する
+await statsPage.filterByGenre('tech');
+expect(await statsPage.getStatsRowCount()).toBe(2);
 
-  // Act: 別のジャンルで絞り込んでから、全ジャンルに戻す
-  await statsPage.filterByGenre('tech');
-  await statsPage.filterByGenre('all');
-  const rowCount = await statsPage.getStatsRowCount();
+// Act: all に戻す
+await statsPage.filterByGenre('all');
 
-  // Assert: テーブルが6件に戻ることを検証
-  expect(rowCount).toBe(6);
+// Assert: 6件に戻った
+expect(await statsPage.getStatsRowCount()).toBe(6);
 });
